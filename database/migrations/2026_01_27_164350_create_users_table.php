@@ -12,9 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        $table->id();
+        $table->string('nama', 100); // Pastikan ini 'nama', bukan 'name'
+        $table->string('email', 100)->unique();
+        $table->string('password');
+        $table->unsignedBigInteger('organisasi_unit_id')->nullable();
+        $table->enum('role', ['super_admin', 'admin_pc', 'admin_pac', 'admin_pr', 'anggota'])->default('anggota');
+        $table->boolean('is_active')->default(true);
+        $table->timestamps();
+
+        $table->foreign('organisasi_unit_id')->references('id')->on('organisasi_units')->onDelete('set null');
+    });
     }
 
     /**

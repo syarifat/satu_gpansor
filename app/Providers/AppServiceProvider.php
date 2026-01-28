@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // 2. Gunakan Bootstrap 5 untuk Pagination (Agar tampilan paging rapi)
-        Paginator::useBootstrapFive();
+        Paginator::useTailwind();
 
         // 3. Mencegah Lazy Loading (Opsional, tapi bagus untuk performa)
         // Ini akan memunculkan error di local jika lupa "with()", tapi aman di production.

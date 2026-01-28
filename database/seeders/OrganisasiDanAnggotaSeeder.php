@@ -15,7 +15,7 @@ class OrganisasiDanAnggotaSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Bersihkan data lama dengan mematikan foreign key check
+        // 1. Bersihkan data lama
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         User::truncate();
         Anggota::truncate();
@@ -44,8 +44,7 @@ class OrganisasiDanAnggotaSeeder extends Seeder
                 'kecamatan_id' => $kec->id,
             ]);
 
-            // Gunakan ID Kecamatan agar email 100% unik
-            // Contoh: pac_350401_1@ansor.com
+            // Email prefix: pac_id_1@ansor.com
             $emailPrefixPac = 'pac_' . $kec->id . '_';
             $this->createMembers($pac, $emailPrefixPac, 'admin_pac', $password);
 
@@ -61,8 +60,7 @@ class OrganisasiDanAnggotaSeeder extends Seeder
                     'desa_id' => $desa->id,
                 ]);
 
-                // Gunakan ID Desa agar email unik (menghindari duplikat nama desa seperti Kauman/Wates)
-                // Contoh: pr_3504012001_1@ansor.com
+                // Email prefix: pr_id_1@ansor.com
                 $emailPrefixPr = 'pr_' . $desa->id . '_';
                 $this->createMembers($pr, $emailPrefixPr, 'admin_pr', $password);
             }
@@ -70,30 +68,42 @@ class OrganisasiDanAnggotaSeeder extends Seeder
     }
 
     /**
-     * Helper Function untuk membuat 5 anggota per unit
-     * Otomatis membuat User (untuk Login) dan Profil Anggota
+     * Helper Function: 1 Admin + 4 Anggota Biasa per Unit
      */
-    private function createMembers($unit, $emailPrefix, $role, $password)
+    private function createMembers($unit, $emailPrefix, $adminRole, $password)
     {
         for ($i = 1; $i <= 5; $i++) {
+            // LOGIKA UTAMA:
+            // Jika $i == 1, maka dia ADMIN dan KETUA.
+            // Jika $i > 1, maka dia ANGGOTA BIASA.
+            
+            $isLeader = ($i == 1);
+            
+            // Tentukan Role User
+            $currentRole = $isLeader ? $adminRole : 'anggota';
+
+            // Tentukan Jabatan ID (Asumsi ID 1 = Ketua, ID 10 = Anggota)
+            // Pastikan ID ini sesuai dengan database MasterDataSeeder Sahabat
+            $jabatanId = $isLeader ? 1 : 10; 
+
             // Buat Akun User
             $user = User::create([
-                'nama' => "Pengurus $i " . $unit->nama,
+                'nama' => ($isLeader ? "Ketua " : "Anggota $i ") . $unit->nama,
                 'email' => $emailPrefix . $i . "@ansor.com",
                 'password' => $password,
                 'organisasi_unit_id' => $unit->id,
-                'role' => $role, // Role: admin_pc, admin_pac, atau admin_pr
+                'role' => $currentRole, 
                 'is_active' => true,
             ]);
 
-            // Generate NIK 16 digit yang unik
-            $nikRandom = substr(str_shuffle("12345678901234567890"), 0, 16);
+            // Generate NIK unik
+            $nikRandom = $this->generateUniqueNik();
 
             // Buat Profil Anggota
             Anggota::create([
                 'user_id' => $user->id,
                 'organisasi_unit_id' => $unit->id,
-                'jabatan_id' => ($i == 1) ? 1 : 10, // ID 1 = Ketua, ID 10 = Anggota (Sesuai MasterDataSeeder)
+                'jabatan_id' => $jabatanId,
                 'nik' => $nikRandom,
                 'nama' => $user->nama,
                 'kelamin' => 'L',
@@ -101,5 +111,13 @@ class OrganisasiDanAnggotaSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+    }
+
+    /**
+     * Helper simpel untuk generate NIK 16 digit
+     */
+    private function generateUniqueNik()
+    {
+        return str_pad(mt_rand(1, 9999999999999999), 16, '0', STR_PAD_LEFT);
     }
 }

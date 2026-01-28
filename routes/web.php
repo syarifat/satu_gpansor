@@ -4,6 +4,25 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPc\UnitOrganisasiController;
 use App\Http\Controllers\WilayahController;
+use App\Http\Controllers\AdminPc\JabatanController;
+use App\Http\Controllers\AdminPc\IndexSuratController;
+use App\Http\Controllers\AdminPc\AnggotaController;
+use App\Http\Controllers\AdminPc\SuratController;
+use App\Http\Controllers\AdminPc\AgendaController;
+use App\Http\Controllers\AdminPc\DashboardController;
+
+use App\Http\Controllers\AdminPac\DashboardController as PacDashboard;
+use App\Http\Controllers\AdminPac\RantingController;
+use App\Http\Controllers\AdminPac\AnggotaController as PacAnggota;
+use App\Http\Controllers\AdminPac\SuratController as PacSurat;
+use App\Http\Controllers\AdminPac\AgendaController as PacAgenda;
+
+use App\Http\Controllers\AdminPr\DashboardController as PrDashboard;
+use App\Http\Controllers\AdminPr\AnggotaController as PrAnggota;
+use App\Http\Controllers\AdminPr\SuratController as PrSurat;
+use App\Http\Controllers\AdminPr\AgendaController as PrAgenda;
+
+use App\Http\Controllers\Anggota\DashboardController as AnggotaDashboard;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,17 +44,39 @@ Route::middleware('auth')->group(function () {
 
 // Hanya Admin PC yang bisa akses
 Route::middleware(['auth', 'role:admin_pc'])->prefix('admin-pc')->name('admin_pc.')->group(function () {
-    // Dashboard Admin PC (Bawaan Breeze atau buat sendiri nanti)
     Route::get('/dashboard', function () {
         return view('admin_pc.dashboard');
     })->name('dashboard');
-
-    // CRUD Unit Organisasi
     Route::resource('unit-organisasi', UnitOrganisasiController::class);
+    Route::resource('jabatan', JabatanController::class);
+    Route::resource('index-surat', IndexSuratController::class);
+    Route::resource('anggota', AnggotaController::class);
+    Route::resource('surat', SuratController::class);
+    Route::patch('surat/{surat}/status', [SuratController::class, 'updateStatus'])->name('surat.status');
+    Route::resource('agenda', AgendaController::class);
+    Route::patch('agenda/{agenda}/status', [AgendaController::class, 'updateStatus'])->name('agenda.status');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 });
 
 // Admin PAC & PC bisa akses (PR dilarang)
-Route::middleware(['auth', 'role:admin_pc,admin_pac'])->group(function () {
+Route::middleware(['auth', 'role:admin_pac'])->prefix('admin-pac')->name('admin_pac.')->group(function () {
+    Route::get('/dashboard', [PacDashboard::class, 'index'])->name('dashboard');
+    Route::resource('ranting', RantingController::class);
+    Route::resource('anggota', PacAnggota::class);
+    Route::resource('surat', PacSurat::class);
+    Route::resource('agenda', PacAgenda::class);
+});
+
+Route::middleware(['auth', 'role:admin_pr'])->prefix('admin-pr')->name('admin_pr.')->group(function () {
+    Route::get('/dashboard', [PrDashboard::class, 'index'])->name('dashboard');
+    Route::resource('anggota', PrAnggota::class);
+    Route::resource('surat', PrSurat::class);
+    Route::resource('agenda', PrAgenda::class);
+});
+
+Route::middleware(['auth', 'role:anggota'])->prefix('anggota')->name('anggota.')->group(function () {
+    Route::get('/dashboard', [AnggotaDashboard::class, 'index'])->name('dashboard');
 });
 
 require __DIR__.'/auth.php';

@@ -33,4 +33,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(Anggota::class);
     }
+
+    // Cek apakah user adalah Admin PC
+    public function isAdminPc() {
+        return $this->role === 'admin_pc';
+    }
+
+    // Cek apakah user adalah Admin PAC
+    public function isAdminPac() {
+        return $this->role === 'admin_pac';
+    }
+
+    // Cek apakah user adalah Admin PR
+    public function isAdminPr() {
+        return $this->role === 'admin_pr';
+    }
 }

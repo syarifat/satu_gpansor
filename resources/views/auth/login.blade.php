@@ -1,98 +1,126 @@
-<x-guest-layout>
-    {{-- CARD LOGIN: Padding dikurangi jadi py-10 px-8 (sebelumnya py-12 px-10) --}}
-    {{-- Lebar dikunci max-w-[400px] agar tetap ramping --}}
-    <div class="w-full sm:max-w-[400px] bg-white shadow-2xl overflow-hidden rounded-[2rem] px-8 py-10 border border-gray-100 relative">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Masuk - {{ config('app.name', 'Satu Ansor') }}</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/logo.png?v=1') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/logo.png?v=1') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/logo.png?v=1') }}">
+    <link rel="shortcut icon" href="{{ asset('img/logo.png?v=1') }}">
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        body { font-family: 'Figtree', sans-serif; }
+    </style>
+</head>
+<body class="font-sans text-gray-900 antialiased bg-slate-50 selection:bg-emerald-500 selection:text-white">
+
+    <div class="min-h-screen flex flex-col justify-center items-center py-10 px-4">
         
-        {{-- 1. LOGO & HEADER (Lebih Ramping) --}}
-        <div class="mb-6 text-center"> {{-- Margin bawah dikurangi jadi 6 --}}
-            <div class="flex justify-center mb-4"> {{-- Margin bawah dikurangi jadi 4 --}}
-                <a href="/" class="transition-transform hover:scale-105 duration-300">
-                    {{-- Logo diperkecil jadi h-20 (sebelumnya h-24) --}}
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo Satu Ansor" class="h-20 w-auto drop-shadow-md object-contain">
-                </a>
-            </div>
+        {{-- CARD LOGIN --}}
+        {{-- Menggunakan max-w-lg agar pas untuk form login (tidak terlalu lebar seperti register) --}}
+        <div class="w-full sm:max-w-lg bg-white shadow-2xl overflow-hidden rounded-[2.5rem] border border-gray-100 relative">
             
-            <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Selamat Datang</h2>
-            <p class="text-xs text-slate-500 mt-1.5 font-medium">Silakan masuk ke Satu Ansor System</p>
-        </div>
-
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
-        {{-- Spasi form dikurangi jadi space-y-5 --}}
-        <form method="POST" action="{{ route('login') }}" class="space-y-5">
-            @csrf
-
-            {{-- 2. EMAIL / USERNAME --}}
-            <div class="space-y-1">
-                <label class="block font-bold text-xs text-slate-700 ml-1" for="email">
-                    Email / Username
-                </label>
-                {{-- Input lebih pendek (py-3) --}}
-                <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm transition-all duration-200 font-medium placeholder:text-slate-400" 
-                       id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" 
-                       placeholder="Masukkan email Anda">
-                <x-input-error :messages="$errors->get('email')" class="mt-1 text-xs font-bold text-rose-500" />
+            {{-- HEADER --}}
+            <div class="pt-10 pb-6 px-8 text-center border-b border-gray-100 bg-white">
+                <div class="flex justify-center mb-4">
+                    <a href="/" class="transition-transform hover:scale-105 duration-300">
+                        <img src="{{ asset('img/logo.png') }}" alt="Logo Satu Ansor" class="h-16 w-auto drop-shadow-md object-contain">
+                    </a>
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Selamat Datang</h2>
+                <p class="text-xs text-slate-500 mt-1.5 font-medium">Silakan masuk ke Satu Ansor System</p>
             </div>
 
-            {{-- 3. PASSWORD (Vanilla JS Toggle) --}}
-            <div class="space-y-1">
-                <div class="flex justify-between items-center ml-1">
-                    <label class="block font-bold text-xs text-slate-700" for="password">
-                        Password
-                    </label>
-                </div>
+            <div class="p-8 md:p-10 bg-white">
+                
+                <x-auth-session-status class="mb-4" :status="session('status')" />
 
-                <div class="relative">
-                    {{-- Input Password lebih pendek (py-3) --}}
-                    <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 pr-12 text-sm transition-all duration-200 font-medium placeholder:text-slate-400" 
-                           id="password" 
-                           type="password" 
-                           name="password" 
-                           required 
-                           autocomplete="current-password" 
-                           placeholder="••••••••">
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                    @csrf
+
+                    {{-- 1. EMAIL / USERNAME --}}
+                    <div class="space-y-1.5">
+                        <label class="block font-bold text-xs text-slate-700 ml-1" for="email">
+                            Email / Username
+                        </label>
+                        <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm transition-all duration-200 font-medium placeholder:text-slate-400" 
+                               id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" 
+                               placeholder="Masukkan email Anda">
+                        @error('email') <p class="text-rose-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- 2. PASSWORD --}}
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between items-center ml-1">
+                            <label class="block font-bold text-xs text-slate-700" for="password">Password</label>
+                        </div>
+
+                        <div class="relative">
+                            <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 pr-12 text-sm transition-all duration-200 font-medium placeholder:text-slate-400" 
+                                   id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••">
+                            
+                            {{-- Tombol Mata --}}
+                            <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer focus:outline-none">
+                                <svg id="icon-show" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 hidden"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path></svg>
+                                <svg id="icon-hide" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"></path></svg>
+                            </button>
+                        </div>
+                        @error('password') <p class="text-rose-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
+                    </div>
+
+                    {{-- 3. REMEMBER ME --}}
+                    <div class="flex items-center justify-between mt-4">
+                        <label for="remember_me" class="inline-flex items-center cursor-pointer group select-none">
+                            <input id="remember_me" type="checkbox" class="rounded-[0.4rem] border-gray-300 text-emerald-600 shadow-sm focus:ring-emerald-500 w-4 h-4 cursor-pointer transition-all" name="remember">
+                            <span class="ms-2.5 text-xs text-slate-600 font-bold group-hover:text-emerald-600 transition-colors">Ingat saya</span>
+                        </label>
+                    </div>
+
+                    {{-- 4. TOMBOL MASUK --}}
+                    <div class="pt-2">
+                        <button type="submit" class="w-full justify-center py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-xl text-xs font-black uppercase tracking-[0.15em] transition-all duration-300 shadow-lg shadow-emerald-100 hover:shadow-xl hover:shadow-emerald-200 transform hover:-translate-y-0.5 active:scale-95">
+                            MASUK SEKARANG
+                        </button>
+                    </div>
+
+                    {{-- 5. DIVIDER DAFTAR --}}
+                    <div class="pt-4">
+                        <div class="relative flex py-2 items-center">
+                            <div class="flex-grow border-t border-gray-100"></div>
+                            <span class="flex-shrink-0 mx-2 text-[10px] text-slate-300 font-bold uppercase tracking-widest">Atau Daftar Baru</span>
+                            <div class="flex-grow border-t border-gray-100"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mt-2">
+                            {{-- Tombol Daftar Anggota --}}
+                            <a href="{{ route('register') }}" class="flex items-center justify-center py-2.5 px-2 bg-slate-50 border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 rounded-xl transition-all duration-200 group">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-center">Daftar<br>Anggota</span>
+                            </a>
+
+                            {{-- Tombol Daftar Organisasi --}}
+                            <a href="{{ route('register.organisasi') }}" class="flex items-center justify-center py-2.5 px-2 bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-600 hover:text-blue-700 rounded-xl transition-all duration-200 group">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-center">Daftar<br>Organisasi</span>
+                            </a>
+                        </div>
+                    </div>
                     
-                    {{-- Tombol Mata --}}
-                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer focus:outline-none">
-                        
-                        {{-- Icon Mata Terbuka --}}
-                        <svg id="icon-show" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 hidden">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"></path>
-                        </svg>
-
-                        {{-- Icon Mata Coret --}}
-                        <svg id="icon-hide" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"></path>
-                        </svg>
-                    </button>
-                </div>
-                <x-input-error :messages="$errors->get('password')" class="mt-1 text-xs font-bold text-rose-500" />
+                    {{-- 6. FOOTER --}}
+                    <div class="text-center pt-2">
+                        <p class="text-[9px] text-slate-300 font-bold uppercase tracking-[0.2em] opacity-70 cursor-default">
+                            {{ config('app.name') }} © {{ date('Y') }}
+                        </p>
+                    </div>
+                </form>
             </div>
-
-            {{-- 4. REMEMBER ME --}}
-            <div class="flex items-center justify-between mt-4">
-                <label for="remember_me" class="inline-flex items-center cursor-pointer group select-none">
-                    <input id="remember_me" type="checkbox" class="rounded-[0.4rem] border-gray-300 text-emerald-600 shadow-sm focus:ring-emerald-500 w-4 h-4 cursor-pointer transition-all" name="remember">
-                    <span class="ms-2.5 text-xs text-slate-600 font-bold group-hover:text-emerald-600 transition-colors">Ingat saya</span>
-                </label>
-            </div>
-
-            {{-- 5. TOMBOL MASUK --}}
-            <div class="pt-2">
-                {{-- Padding tombol dikurangi jadi py-3.5 --}}
-                <button type="submit" class="w-full justify-center py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-xl text-xs font-black uppercase tracking-[0.15em] transition-all duration-300 shadow-lg shadow-emerald-100 hover:shadow-xl hover:shadow-emerald-200 transform hover:-translate-y-0.5 active:scale-95">
-                    MASUK SEKARANG
-                </button>
-            </div>
-            
-            {{-- 6. FOOTER --}}
-            <div class="text-center pt-4">
-                <p class="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] opacity-70 cursor-default">
-                    SATU ANSOR SYSTEM © {{ date('Y') }}
-                </p>
-            </div>
-        </form>
+        </div>
     </div>
 
     {{-- SCRIPT TOGGLE PASSWORD --}}
@@ -113,4 +141,5 @@
             }
         }
     </script>
-</x-guest-layout>
+</body>
+</html>

@@ -79,4 +79,7 @@ Route::middleware(['auth', 'role:anggota'])->prefix('anggota')->name('anggota.')
     Route::get('/dashboard', [AnggotaDashboard::class, 'index'])->name('dashboard');
 });
 
+Route::get('/desa/{kecamatan_id}', function ($kecamatan_id) {
+    return \App\Models\Desa::where('kecamatan_id', $kecamatan_id)->get(['id', 'nama']);
+});
 require __DIR__.'/auth.php';

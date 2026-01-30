@@ -50,7 +50,8 @@ Route::middleware(['auth', 'role:admin_pc'])->prefix('admin-pc')->name('admin_pc
     Route::resource('unit-organisasi', UnitOrganisasiController::class);
     Route::resource('jabatan', JabatanController::class);
     Route::resource('index-surat', IndexSuratController::class);
-    Route::resource('anggota', AnggotaController::class);
+    // Route::resource('anggota', AnggotaController::class);
+    Route::resource('anggota', AnggotaController::class)->parameters(['anggota' => 'anggota']);
     Route::resource('surat', SuratController::class);
     Route::patch('surat/{surat}/status', [SuratController::class, 'updateStatus'])->name('surat.status');
     Route::resource('agenda', AgendaController::class);

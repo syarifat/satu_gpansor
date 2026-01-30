@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminPc\AnggotaController;
 use App\Http\Controllers\AdminPc\SuratController;
 use App\Http\Controllers\AdminPc\AgendaController;
 use App\Http\Controllers\AdminPc\DashboardController;
+use App\Http\Controllers\AdminPc\PekerjaanController;
 
 use App\Http\Controllers\AdminPac\DashboardController as PacDashboard;
 use App\Http\Controllers\AdminPac\RantingController;
@@ -57,7 +58,7 @@ Route::middleware(['auth', 'role:admin_pc'])->prefix('admin-pc')->name('admin_pc
     Route::resource('agenda', AgendaController::class);
     Route::patch('agenda/{agenda}/status', [AgendaController::class, 'updateStatus'])->name('agenda.status');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+    Route::get('/data-pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
 });
 
 // Admin PAC & PC bisa akses (PR dilarang)

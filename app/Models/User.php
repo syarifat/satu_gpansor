@@ -9,21 +9,44 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
-        'nama', 'email', 'password', 
-        'organisasi_unit_id', 'role', 'is_active'
+        'nama', 
+        'email', 
+        'password', 
+        'organisasi_unit_id', 
+        'role', 
+        'is_active',
+        'google_id', // TAMBAHAN BARU
+        'avatar',    // TAMBAHAN BARU
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'is_active' => 'boolean',
         'password' => 'hashed',
     ];
 
-    // Relasi
+    // --- RELASI ---
+
     public function organisasiUnit()
     {
         return $this->belongsTo(OrganisasiUnit::class);
@@ -33,6 +56,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Anggota::class);
     }
+
+    // --- HELPER ROLE ---
 
     // Cek apakah user adalah Admin PC
     public function isAdminPc() {

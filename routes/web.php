@@ -25,6 +25,9 @@ use App\Http\Controllers\AdminPr\AgendaController as PrAgenda;
 
 use App\Http\Controllers\Anggota\DashboardController as AnggotaDashboard;
 
+use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\Auth\CompleteProfileController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -37,7 +40,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+    Route::get('/complete-profile', [CompleteProfileController::class, 'create'])
+        ->name('complete.profile');
+        
+    Route::post('/complete-profile', [CompleteProfileController::class, 'store'])
+        ->name('complete.profile.store');
+        
     // API untuk mendapatkan daftar desa berdasarkan kecamatan (untuk dropdown dinamis)
     Route::get('/api/wilayah/desa/{kecamatan_id}', [WilayahController::class, 'getDesaByKecamatan'])
          ->name('api.wilayah.desa');
@@ -84,4 +92,12 @@ Route::middleware(['auth', 'role:anggota'])->prefix('anggota')->name('anggota.')
 Route::get('/desa/{kecamatan_id}', function ($kecamatan_id) {
     return \App\Models\Desa::where('kecamatan_id', $kecamatan_id)->get(['id', 'nama']);
 });
-require __DIR__.'/auth.php';
+
+Route::middleware('guest')->group(function () {
+    // Login Google
+    Route::get('/auth/google', [SocialiteController::class, 'redirect'])->name('auth.google');
+    Route::get('/auth/google/callback', [SocialiteController::class, 'callback']);
+});
+
+
+    require __DIR__.'/auth.php';

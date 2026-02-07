@@ -8,6 +8,7 @@ use App\Models\Anggota;
 use App\Models\Kecamatan;
 use App\Models\Desa;
 use App\Models\RiwayatPengkaderan;
+use App\Models\Jabatan; // Import Model Jabatan (Opsional jika pakai DB)
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -21,14 +22,37 @@ class OrganisasiDanAnggotaSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         User::truncate();
         Anggota::truncate();
-        RiwayatPengkaderan::truncate(); // Reset riwayat juga
+        RiwayatPengkaderan::truncate();
         OrganisasiUnit::truncate();
+        DB::table('jabatans')->truncate(); // Hapus data jabatan lama
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $password = Hash::make('password');
-        $faker = Faker::create('id_ID'); // Pakai Faker Indonesia
+        $faker = Faker::create('id_ID');
 
-        // 2. BUAT UNIT PC (Pusat Cabang) - ISI LENGKAP
+        // =========================================================================
+        // 1.5. ISI DATA JABATAN (PENTING AGAR TIDAK ERROR FOREIGN KEY)
+        // =========================================================================
+        // Kita paksa insert ID 1 dan 10 agar cocok dengan logika createMembers di bawah
+        DB::table('jabatans')->insert([
+            [
+                'id' => 1,
+                'nama' => 'Ketua',
+                'level_akses' => 'pimpinan', // Sesuaikan dengan kolom di tabel Anda
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Kita loncat ke ID 10 sesuai request kode Anda (jabatanId = 10)
+            [
+                'id' => 10,
+                'nama' => 'Anggota',
+                'level_akses' => 'anggota',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
+
+        // 2. BUAT UNIT PC (Pusat Cabang)
         $pc = OrganisasiUnit::create([
             'nama' => 'PC GP Ansor Tulungagung',
             'level' => 'pc',
@@ -60,7 +84,7 @@ class OrganisasiDanAnggotaSeeder extends Seeder
             $emailPrefixPac = 'pac_' . $kec->id . '_';
             $this->createMembers($pac, $emailPrefixPac, 'admin_pac', $password, $faker);
 
-            // 4. BUAT PR (Pimpinan Ranting) DI SETIAP PAC
+            // 4. BUAT PR DI SETIAP PAC
             $desas = Desa::where('kecamatan_id', $kec->id)->get();
 
             foreach ($desas as $desa) {
@@ -83,12 +107,14 @@ class OrganisasiDanAnggotaSeeder extends Seeder
 
     private function createMembers($unit, $emailPrefix, $adminRole, $password, $faker)
     {
-        // Ambil random desa di Tulungagung untuk alamat domisili anggota (random sampling)
+        // Ambil random desa
         $randomDesa = Desa::inRandomOrder()->first(); 
 
         for ($i = 1; $i <= 5; $i++) {
             $isLeader = ($i == 1);
             $currentRole = $isLeader ? $adminRole : 'anggota';
+            
+            // Di sini letak masalah sebelumnya: ID 1 & 10 harus ada di tabel jabatans
             $jabatanId = $isLeader ? 1 : 10; 
 
             // Buat Akun User
@@ -102,13 +128,13 @@ class OrganisasiDanAnggotaSeeder extends Seeder
             ]);
 
             $nikRandom = $this->generateUniqueNik();
-            $niaRandom = '13.04.' . rand(10, 99) . '.' . rand(1000, 9999); // Contoh format NIA
+            $niaRandom = '13.04.' . rand(10, 99) . '.' . rand(1000, 9999);
 
-            // Buat Profil Anggota (LENGKAP SEMUA FIELD)
+            // Buat Profil Anggota
             $anggota = Anggota::create([
                 'user_id' => $user->id,
                 'organisasi_unit_id' => $unit->id,
-                'jabatan_id' => $jabatanId,
+                'jabatan_id' => $jabatanId, // Aman karena ID 1 & 10 sudah dibuat di atas
                 'nik' => $nikRandom,
                 'nia_ansor' => $niaRandom,
                 'nama' => $user->nama,
@@ -117,10 +143,10 @@ class OrganisasiDanAnggotaSeeder extends Seeder
                 'kelamin' => 'L',
                 'status_kawin' => $faker->randomElement(['belum_kawin', 'kawin']),
                 'notelp' => $faker->phoneNumber,
-                'url_foto' => null, // Bisa diisi path dummy image jika ada
+                'url_foto' => null,
                 'alamat' => $faker->address,
-                'kecamatan_id' => $randomDesa->kecamatan_id, // Asumsi domisili random
-                'desa_id' => $randomDesa->id,                // Asumsi domisili random
+                'kecamatan_id' => $randomDesa->kecamatan_id ?? 350401, // Fallback ID jika null
+                'desa_id' => $randomDesa->id ?? 3504012001,      // Fallback ID jika null
                 'last_education' => $faker->randomElement(['SMA', 'S1', 'S2', 'Pesantren']),
                 'job_title' => $faker->jobTitle,
                 'job_address' => $faker->city,
@@ -128,21 +154,20 @@ class OrganisasiDanAnggotaSeeder extends Seeder
                 'updated_at' => now(),
             ]);
 
-            // Tambahkan Riwayat Pengkaderan (Agar tabel riwayat_pengkaderans terisi)
+            // Tambahkan Riwayat Pengkaderan
             RiwayatPengkaderan::create([
                 'anggota_id' => $anggota->id,
-                'jenis_pengkaderan' => 'PKD', // Pelatihan Kepemimpinan Dasar
+                'jenis_pengkaderan' => 'PKD',
                 'tanggal_pelaksanaan' => now()->subYears(rand(1, 3)),
                 'pelaksana' => 'PAC GP Ansor ' . ($unit->level == 'pac' ? 'Setempat' : 'Tetangga'),
                 'nomor_sertifikat' => 'PKD/2023/' . rand(1000, 9999),
                 'url_dokumen' => null,
             ]);
 
-            // Jika Ketua, tambahkan riwayat lanjutan
             if ($isLeader) {
                 RiwayatPengkaderan::create([
                     'anggota_id' => $anggota->id,
-                    'jenis_pengkaderan' => 'PKL', // Pelatihan Kepemimpinan Lanjutan
+                    'jenis_pengkaderan' => 'PKL',
                     'tanggal_pelaksanaan' => now()->subMonths(rand(1, 11)),
                     'pelaksana' => 'PC GP Ansor Tulungagung',
                     'nomor_sertifikat' => 'PKL/2024/' . rand(1000, 9999),

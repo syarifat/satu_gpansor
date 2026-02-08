@@ -30,7 +30,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $user = \Illuminate\Support\Facades\Auth::user();
+
+    return match ($user->role) {
+        'admin_pc' => redirect()->route('admin_pc.dashboard'),
+        'admin_pac' => redirect()->route('admin_pac.dashboard'),
+        'admin_pr' => redirect()->route('admin_pr.dashboard'),
+        default => redirect()->route('anggota.dashboard'),
+    };
 })->middleware(['auth', 'verified', 'profile.complete'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

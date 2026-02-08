@@ -103,8 +103,11 @@ class GoogleAuthController extends Controller
 
                 Auth::login($existingUser, true);
 
-                // User existing dengan profil lengkap, langsung ke dashboard
-                return redirect()->route('dashboard');
+                $existingUser->refresh();
+
+                // Redirect sesuai role menggunakan service
+                $redirectUrl = $this->googleAuthService->getRedirectRoute($existingUser);
+                return redirect($redirectUrl);
             }
         } catch (\Exception $e) {
             $route = session('google_auth_type') === 'register' ? 'register' : 'login';

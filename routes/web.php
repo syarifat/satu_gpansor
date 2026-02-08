@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminPc\SuratController;
 use App\Http\Controllers\AdminPc\AgendaController;
 use App\Http\Controllers\AdminPc\DashboardController;
 use App\Http\Controllers\AdminPc\PekerjaanController;
+use App\Http\Controllers\AdminPc\AdminManagerController;
 
 use App\Http\Controllers\AdminPac\DashboardController as PacDashboard;
 use App\Http\Controllers\AdminPac\RantingController;
@@ -56,8 +57,6 @@ Route::middleware(['auth', 'profile.complete', 'role:admin_pc'])->prefix('admin-
         return view('admin_pc.dashboard');
     })->name('dashboard');
     // Route::resource('anggota', AnggotaController::class);
-    Route::post('/anggota/{anggota}/promote', [AnggotaController::class, 'promoteToAdmin'])->name('anggota.promote');
-    Route::post('/anggota/{anggota}/demote', [AnggotaController::class, 'demoteToMember'])->name('anggota.demote');
     Route::resource('anggota', AnggotaController::class)->parameters(['anggota' => 'anggota']);
     Route::resource('unit-organisasi', UnitOrganisasiController::class);
     Route::resource('jabatan', JabatanController::class);
@@ -68,6 +67,9 @@ Route::middleware(['auth', 'profile.complete', 'role:admin_pc'])->prefix('admin-
     Route::patch('agenda/{agenda}/status', [AgendaController::class, 'updateStatus'])->name('agenda.status');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/data-pekerjaan', [PekerjaanController::class, 'index'])->name('pekerjaan.index');
+
+    // Manajemen Admin Unit
+    Route::resource('admin-manager', AdminManagerController::class)->except(['show', 'edit', 'update']);
 });
 
 // Admin PAC & PC bisa akses (PR dilarang)

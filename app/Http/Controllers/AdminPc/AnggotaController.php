@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AnggotaController extends Controller
 {
@@ -25,17 +26,44 @@ class AnggotaController extends Controller
             });
         }
 
-        // Filter Berdasarkan Unit (PAC/PR)
-        if ($request->unit_id) {
-            $query->where('organisasi_unit_id', $request->unit_id);
+        // Filter PAC (Menampilkan anggota PAC tersebut + semua anggota PR di bawahnya)
+        if ($request->pac_id && !$request->pr_id) {
+            $pacId = $request->pac_id;
+            // Ambil semua unit ID yang terkait (PAC itu sendiri + PR di bawahnya)
+            $unitIds = OrganisasiUnit::where('id', $pacId)
+                ->orWhere('parent_id', $pacId)
+                ->pluck('id');
+
+            $query->whereIn('organisasi_unit_id', $unitIds);
+        }
+
+        // Filter PR (Spesifik satu ranting)
+        if ($request->pr_id) {
+            $query->where('organisasi_unit_id', $request->pr_id);
+        }
+
+        // Handle Export PDF
+        if ($request->has('export') && $request->export == 'pdf') {
+            $anggotas = $query->latest()->get(); // Get all data for export
+            $pdf = Pdf::loadView('admin_pc.anggota.pdf', compact('anggotas'));
+            return $pdf->download('laporan-anggota.pdf');
         }
 
         $anggotas = $query->latest()->paginate(10)->withQueryString();
 
         // Data untuk Dropdown Filter
-        $pacs = OrganisasiUnit::where('level', 'pac')->orderBy('nama', 'asc')->get();
+        $allPacs = OrganisasiUnit::where('level', 'pac')->orderBy('nama', 'asc')->get();
 
-        return view('admin_pc.anggota.index', compact('anggotas', 'pacs'));
+        // Data PR (tergantung PAC yang dipilih)
+        $prs = [];
+        if ($request->pac_id) {
+            $prs = OrganisasiUnit::where('parent_id', $request->pac_id)
+                ->where('level', 'pr')
+                ->orderBy('nama', 'asc')
+                ->get();
+        }
+
+        return view('admin_pc.anggota.index', compact('anggotas', 'allPacs', 'prs'));
     }
 
     public function create()
@@ -90,59 +118,4 @@ class AnggotaController extends Controller
     /**
      * Jadikan Anggota sebagai Admin Unit
      */
-    public function promoteToAdmin(Request $request, Anggota $anggota)
-    {
-        $organisasiUnit = $anggota->organisasiUnit;
-
-        // Tentukan Role Baru berdasarkan Level Unit
-        if ($organisasiUnit->level === 'pac') {
-            $newRole = 'admin_pac';
-            $jabatanId = 2; // Asumsi ID 2 = Ketua PAC (Sesuaikan dengan seeder Jabatan)
-        } elseif ($organisasiUnit->level === 'pr') {
-            $newRole = 'admin_pr';
-            $jabatanId = 3; // Asumsi ID 3 = Ketua Ranting
-        } else {
-            return back()->with('error', 'Anggota ini berada di level PC atau unit tidak valid untuk jadi admin.');
-        }
-
-        // Cek apakah unit sudah punya admin
-        $existingAdmin = User::where('organisasi_unit_id', $organisasiUnit->id)
-            ->where('role', $newRole)
-            ->where('id', '!=', $anggota->user_id) // Kecuali diri sendiri (idempotent)
-            ->first();
-
-        if ($existingAdmin) {
-            return back()->with('error', "Gagal! Unit {$organisasiUnit->nama} sudah memiliki admin: {$existingAdmin->nama}.");
-        }
-
-        // Jalankan Update dalam Transaksi
-        DB::transaction(function () use ($anggota, $newRole, $jabatanId) {
-            // 1. Update Role User
-            $anggota->user->update(['role' => $newRole]);
-
-            // 2. Update Jabatan Anggota (Opsional, tapi baik untuk data)
-            // Cek dulu apakah jabatan ada, kalau gak ada biarkan jabatan lama
-            if (Jabatan::find($jabatanId)) {
-                $anggota->update(['jabatan_id' => $jabatanId]);
-            }
-        });
-
-        return back()->with('success', "Berhasil! {$anggota->nama} sekarang adalah Admin {$organisasiUnit->nama}.");
-    }
-
-    /**
-     * Copot Admin (Kembali jadi Anggota)
-     */
-    public function demoteToMember(Anggota $anggota)
-    {
-        DB::transaction(function () use ($anggota) {
-            // 1. Kembalikan Role ke Anggota
-            $anggota->user->update(['role' => 'anggota']);
-
-            // 2. Kembalikan Jabatan ke Anggota (ID 10)
-            $anggota->update(['jabatan_id' => 10]);
-        });
-
-        return back()->with('success', "Akses admin {$anggota->nama} dicabut. Kembali menjadi Anggota biasa.");
-    }
 }

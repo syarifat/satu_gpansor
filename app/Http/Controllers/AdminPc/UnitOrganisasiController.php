@@ -10,23 +10,34 @@ use Illuminate\Http\Request;
 
 class UnitOrganisasiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil PAC dan PR, sertakan relasi kecamatan, desa, dan unit induk
-        $units = OrganisasiUnit::with(['kecamatan', 'desa', 'parent'])
-                    ->whereIn('level', ['pac', 'pr'])
-                    ->orderBy('level', 'asc')
-                    ->orderBy('nama', 'asc')
-                    ->paginate(15);
+        $query = OrganisasiUnit::with(['kecamatan', 'desa', 'parent'])
+            ->whereIn('level', ['pac', 'pr']);
 
-        return view('admin_pc.unit_organisasi.index', compact('units'));
+        // Filter by PAC (Parent-Children relationship)
+        if ($request->has('pac_id') && $request->pac_id != '') {
+            $query->where('parent_id', $request->pac_id);
+        }
+
+        $units = $query->orderBy('level', 'asc')
+            ->orderBy('nama', 'asc')
+            ->paginate(15);
+
+        $totalPac = OrganisasiUnit::where('level', 'pac')->count();
+        $totalPr = OrganisasiUnit::where('level', 'pr')->count();
+
+        // List of PACs for dropdown filter
+        $allPacs = OrganisasiUnit::where('level', 'pac')->orderBy('nama', 'asc')->get();
+
+        return view('admin_pc.unit_organisasi.index', compact('units', 'totalPac', 'totalPr', 'allPacs'));
     }
 
     public function create()
     {
         $kecamatans = Kecamatan::orderBy('nama', 'asc')->get();
         $pacs = OrganisasiUnit::where('level', 'pac')->orderBy('nama', 'asc')->get();
-        
+
         return view('admin_pc.unit_organisasi.create', compact('kecamatans', 'pacs'));
     }
 
@@ -43,6 +54,6 @@ class UnitOrganisasiController extends Controller
         OrganisasiUnit::create($request->all());
 
         return redirect()->route('admin_pc.unit-organisasi.index')
-                         ->with('success', 'Unit Organisasi berhasil ditambahkan.');
+            ->with('success', 'Unit Organisasi berhasil ditambahkan.');
     }
 }

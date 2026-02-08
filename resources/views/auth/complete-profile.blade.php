@@ -104,7 +104,7 @@
                         {{-- NIK --}}
                         <div class="space-y-1.5">
                             <label class="block font-bold text-xs text-slate-700 ml-1">NIK (16 Digit) <span class="text-rose-500">*</span></label>
-                            <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all @error('nik') border-rose-500 @enderror"
+                            <input class="block w-full {{ $errors->has('nik') ? 'border-rose-500' : 'border-gray-200' }} bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all"
                                 type="text" name="nik" value="{{ old('nik') }}" required placeholder="Nomor Induk Kependudukan" maxlength="16">
                         </div>
 
@@ -120,12 +120,12 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-1.5">
                                 <label class="block font-bold text-xs text-slate-700 ml-1">Tempat Lahir <span class="text-rose-500">*</span></label>
-                                <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all @error('tempat_lahir') border-rose-500 @enderror"
+                                <input class="block w-full {{ $errors->has('tempat_lahir') ? 'border-rose-500' : 'border-gray-200' }} bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all"
                                     type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" required placeholder="Kota Lahir">
                             </div>
                             <div class="space-y-1.5">
                                 <label class="block font-bold text-xs text-slate-700 ml-1">Tanggal Lahir <span class="text-rose-500">*</span></label>
-                                <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all @error('tanggal_lahir') border-rose-500 @enderror"
+                                <input class="block w-full {{ $errors->has('tanggal_lahir') ? 'border-rose-500' : 'border-gray-200' }} bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all"
                                     type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required>
                             </div>
                         </div>
@@ -153,7 +153,7 @@
                         {{-- No. Telp --}}
                         <div class="space-y-1.5">
                             <label class="block font-bold text-xs text-slate-700 ml-1">No. WhatsApp / HP <span class="text-rose-500">*</span></label>
-                            <input class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all @error('notelp') border-rose-500 @enderror"
+                            <input class="block w-full {{ $errors->has('notelp') ? 'border-rose-500' : 'border-gray-200' }} bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all"
                                 type="text" name="notelp" value="{{ old('notelp') }}" required placeholder="08xxxxxxxxxx">
                         </div>
                     </div>
@@ -170,7 +170,7 @@
 
                             <div class="space-y-1.5">
                                 <label class="block font-bold text-xs text-slate-700 ml-1">Alamat Lengkap <span class="text-rose-500">*</span></label>
-                                <textarea name="alamat" rows="2" required class="block w-full border-gray-200 bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all @error('alamat') border-rose-500 @enderror" placeholder="Jalan / Dusun / RT / RW">{{ old('alamat') }}</textarea>
+                                <textarea name="alamat" rows="2" required class="block w-full {{ $errors->has('alamat') ? 'border-rose-500' : 'border-gray-200' }} bg-slate-50 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 rounded-xl shadow-sm py-3 px-4 text-sm font-medium transition-all" placeholder="Jalan / Dusun / RT / RW">{{ old('alamat') }}</textarea>
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">

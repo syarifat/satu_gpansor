@@ -1,161 +1,302 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'Satu Ansor') }}</title>
+    <title>SATRIA TULUNGAGUNG | Sistem Administrasi Terpadu & Terintegrasi Ansor</title>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('img/logo.png?v=1') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/logo.png?v=1') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/logo.png?v=1') }}">
-    <link rel="shortcut icon" href="{{ asset('img/logo.png?v=1') }}">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600,800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            emerald: {
-                                50: '#ecfdf5',
-                                100: '#d1fae5',
-                                200: '#a7f3d0',
-                                300: '#6ee7b7',
-                                400: '#34d399',
-                                500: '#10b981',
-                                600: '#059669',
-                                700: '#047857',
-                                800: '#065f46',
-                                900: '#064e3b',
-                                950: '#022c22',
-                            },
-                        },
-                        fontFamily: {
-                            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        }
-                    }
-                }
-            }
-        </script>
-    @endif
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        /* Pattern Batik Kawung (Halus) */
-        .bg-batik {
-            background-color: #ecfdf5; /* Emerald-50 */
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23059669' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        body {
+            font-family: 'Outfit', sans-serif;
         }
-        /* Efek Glassmorphism */
-        .glass {
+
+        .text-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bg-gradient-mesh {
+            background-color: #f8fafc;
+            background-image:
+                radial-gradient(at 0% 0%, hsla(158, 82%, 90%, 1) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, hsla(160, 84%, 85%, 1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(155, 80%, 95%, 1) 0px, transparent 50%);
+        }
+
+        .glass-card {
             background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
-<body class="bg-batik text-emerald-950 min-h-screen flex flex-col antialiased selection:bg-emerald-200 selection:text-emerald-900 overflow-x-hidden">
 
-    <nav class="w-full fixed top-0 z-50 glass transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+<body class="antialiased bg-slate-50 relative overflow-x-hidden">
+
+    <!-- Background Decoration -->
+    <div class="fixed inset-0 bg-gradient-mesh -z-10"></div>
+    <div class="fixed top-[-10%] right-[-10%] w-[40rem] h-[40rem] bg-emerald-300/20 rounded-full blur-[100px] -z-10 animate-pulse"></div>
+    <div class="fixed bottom-[-10%] left-[-10%] w-[35rem] h-[35rem] bg-teal-300/20 rounded-full blur-[80px] -z-10"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 px-6 py-4">
+        <div class="max-w-7xl mx-auto glass-card rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-emerald-900/5">
             <div class="flex items-center gap-3">
-                <a href="/" class="flex items-center gap-3 group">
-                    <img src="{{ asset('img/logo.png') }}" alt="Logo GP Ansor" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-sm">
-                    <div class="font-extrabold text-lg tracking-tight text-emerald-900 group-hover:text-emerald-700 transition-colors leading-tight">
-                        ANSOR<br><span class="text-emerald-600 font-bold text-sm tracking-widest">TULUNGAGUNG</span>
-                    </div>
-                </a>
+                <img src="{{ asset('img/logo.png') }}" class="h-10 w-auto" alt="Logo">
+                <div class="leading-none">
+                    <h1 class="font-black text-xl tracking-tight text-slate-800">SATRIA</h1>
+                    <p class="text-[0.6rem] font-bold text-emerald-600 tracking-widest uppercase">Tulungagung</p>
+                </div>
             </div>
 
-            <div class="hidden md:flex items-center gap-8 text-[14px] font-bold text-emerald-800 tracking-wide">
-                <a href="#" class="relative hover:text-emerald-600 transition-colors after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-emerald-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">HOME</a>
-                <a href="#" class="relative hover:text-emerald-600 transition-colors after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-emerald-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">BERITA</a>
-                <a href="#" class="relative hover:text-emerald-600 transition-colors after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-emerald-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">AGENDA</a>
-                <a href="#" class="relative hover:text-emerald-600 transition-colors after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-emerald-500 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">GALERI</a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#filosofi" class="text-sm font-bold text-slate-500 hover:text-emerald-600 transition-colors">Filosofi</a>
+                <a href="#fungsi" class="text-sm font-bold text-slate-500 hover:text-emerald-600 transition-colors">Fungsi</a>
+                <a href="#kontak" class="text-sm font-bold text-slate-500 hover:text-emerald-600 transition-colors">Kontak</a>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
                 @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="px-5 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/30 hover:-translate-y-0.5">
-                            Dashboard
-                        </a>
-                    @else
-                        @if (Route::has('register'))
-                            <a href="{{ route('login') }}" class="group relative px-6 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 to-emerald-500 text-white text-sm font-bold hover:from-emerald-700 hover:to-emerald-600 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 overflow-hidden">
-                                <span class="relative z-10">Portal Internal</span>
-                                <div class="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-emerald-700/20"></div>
-                            </a>
-                        @endif
-                    @endauth
+                @auth
+                <a href="{{ url('/dashboard') }}" class="px-5 py-2.5 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform">Dashboard</a>
+                @else
+                <a href="{{ route('login') }}" class="text-sm font-bold text-slate-800 hover:text-emerald-600 transition px-4">Masuk</a>
+
+                @if (Route::has('register'))
+                <a href="{{ route('register') }}" class="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full text-xs font-bold uppercase tracking-wider hover:shadow-lg hover:shadow-emerald-500/30 transition hover:-translate-y-0.5 transform">Daftar</a>
+                @endif
+                @endauth
                 @endif
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow flex items-center justify-center px-6 relative pt-24 pb-12">
-        
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-            <div class="absolute top-[10%] left-[-10%] w-[600px] h-[600px] bg-emerald-200/40 rounded-full blur-[120px] mix-blend-multiply animate-pulse" style="animation-duration: 8s;"></div>
-            <div class="absolute bottom-[10%] right-[-10%] w-[500px] h-[500px] bg-emerald-300/30 rounded-full blur-[100px] mix-blend-multiply animate-pulse" style="animation-duration: 10s;"></div>
-        </div>
-
-        <div class="w-full max-w-5xl mx-auto text-center relative z-10 py-12 md:py-20">
-            
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/60 border border-emerald-200/50 text-emerald-700 text-[10px] font-bold tracking-[0.2em] uppercase mb-8 shadow-sm backdrop-blur-sm hover:bg-white/80 transition-colors cursor-default">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping absolute opacity-75"></span>
-                <span class="w-2 h-2 rounded-full bg-emerald-500 relative"></span>
-                Official Digital Platform
+    <!-- Hero Section -->
+    <section class="min-h-screen flex flex-col justify-center items-center pt-32 pb-20 px-4 relative">
+        <div class="max-w-5xl mx-auto text-center z-10 space-y-8">
+            <div class="inline-block animate-fade-in-up">
+                <span class="px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-[0.3em] border border-emerald-200 shadow-sm">
+                    Revolusi Digital Organisasi
+                </span>
             </div>
 
-            <div class="mb-8 space-y-1">
-                <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-emerald-950 leading-[0.9] drop-shadow-sm">
-                    Traffic Ansor
-                </h1>
-                <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-800 italic pr-2">
-                    Masa Depan
-                </h1>
-            </div>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 leading-tight tracking-tight">
+                SATRIA <br>
+                <span class="text-gradient">TULUNGAGUNG</span>
+            </h1>
 
-            <p class="max-w-2xl mx-auto text-lg md:text-xl text-emerald-800/70 mb-10 leading-relaxed font-medium">
-                Sahabat Tulungagung Applications (SATU Aplikasi) adalah Platform Digital yang Mengintegrasikan Pelayanan Program GP Ansor Tulungagung.
+            <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto font-medium leading-relaxed">
+                <strong class="text-slate-800">Sistem Administrasi Terpadu & Terintegrasi Ansor</strong>.
+                Langkah nyata transformasi digital GP Ansor Tulungagung menuju organisasi yang modern, mandiri, dan akuntabel.
             </p>
 
-            <div class="flex flex-wrap justify-center gap-4 md:gap-6 text-xs font-bold text-emerald-600 mb-12 uppercase tracking-widest">
-                <span class="px-3 py-1 bg-emerald-100/50 rounded-lg">#ansortulungagung</span>
-                <span class="px-3 py-1 bg-emerald-100/50 rounded-lg">#trafficansormasadepan</span>
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#" class="group w-full sm:w-auto px-8 py-4 bg-white text-emerald-900 font-bold rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] border border-emerald-100/50 hover:border-emerald-300 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3">
-                    <span>Eksplorasi Berita</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-emerald-500 group-hover:translate-x-1 transition-transform">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+                <a href="{{ route('register') }}" class="px-8 py-4 bg-slate-900 text-white rounded-2xl text-sm font-black uppercase tracking-widest shadow-xl hover:shadow-2xl hover:bg-black transition transform hover:-translate-y-1">
+                    Gabung Sekarang
                 </a>
-                <a href="#" class="w-full sm:w-auto px-8 py-4 bg-emerald-700 text-white font-bold rounded-2xl shadow-xl shadow-emerald-700/30 hover:bg-emerald-800 hover:shadow-emerald-700/50 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                    Lihat Agenda
+                <a href="#filosofi" class="px-8 py-4 bg-white text-slate-800 border border-slate-200 rounded-2xl text-sm font-black uppercase tracking-widest shadow-lg hover:shadow-xl hover:border-emerald-200 transition transform hover:-translate-y-1">
+                    Pelajari Lebih Lanjut
                 </a>
             </div>
         </div>
-    </main>
 
-    <footer class="w-full text-center py-8 relative z-10">
-        <div class="border-t border-emerald-100 max-w-xs mx-auto mb-6"></div>
-        <p class="text-emerald-800/40 text-[10px] font-bold tracking-[0.2em] uppercase hover:text-emerald-600 transition-colors cursor-default">
-            &copy; {{ date('Y') }} GP Ansor Tulungagung
-        </p>
+        <!-- Float Elements -->
+        <div class="absolute top-1/4 left-10 hidden lg:block animate-bounce-slow">
+            <div class="glass-card p-4 rounded-2xl shadow-lg transform -rotate-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-800">Data Tervalidasi</p>
+                        <p class="text-[10px] text-slate-500">Real-time update</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-1/4 right-10 hidden lg:block animate-bounce-slow delay-700">
+            <div class="glass-card p-4 rounded-2xl shadow-lg transform rotate-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-800">Manajemen Unit</p>
+                        <p class="text-[10px] text-slate-500">PC, PAC & Ranting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filosofi & Makna -->
+    <section id="filosofi" class="py-24 px-4 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8">
+                    <span class="text-emerald-600 font-black tracking-widest text-sm uppercase">Identitas & Semangat</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+                        Mengapa <span class="text-emerald-600">SATRIA?</span>
+                    </h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        Nama <strong>SATRIA</strong> bukan sekadar singkatan, melainkan representasi dari jiwa kader Ansor.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="glass-card p-6 rounded-3xl border-l-4 border-emerald-500 hover:shadow-lg transition-all">
+                            <h3 class="font-bold text-xl text-slate-800 mb-2">Filosofi Nama</h3>
+                            <p class="text-slate-600">
+                                <strong>SATRIA</strong> adalah akronim dari <em>Sistem Administrasi Terpadu & Terintegrasi Ansor</em>.
+                                Sebuah sistem yang dirancang untuk menyatukan gerak langkah organisasi dalam satu komando data.
+                            </p>
+                        </div>
+
+                        <div class="glass-card p-6 rounded-3xl border-l-4 border-yellow-400 hover:shadow-lg transition-all">
+                            <h3 class="font-bold text-xl text-slate-800 mb-2">Makna Simbolis</h3>
+                            <p class="text-slate-600">
+                                "Satria" melambangkan karakter kader Ansor yang <strong>gagah berani, tangguh, dan setia</strong>.
+                                Selalu siap di garis terdepan menjaga Ulama, Habaib, dan keutuhan NKRI.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-[3rem] rotate-6 opacity-20 blur-2xl"></div>
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Teamwork" class="relative rounded-[3rem] shadow-2xl grayscale hover:grayscale-0 transition-all duration-700 object-cover h-[500px] w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fungsi Utama -->
+    <section id="fungsi" class="py-24 bg-slate-900 text-white rounded-t-[4rem] relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-20 animate-on-scroll">
+                <span class="text-emerald-400 font-bold tracking-[0.2em] text-xs uppercase mb-4 block">Core Features</span>
+                <h2 class="text-3xl md:text-5xl font-black mb-6">4 Pilar Fungsi Utama</h2>
+                <p class="text-slate-400 text-lg">SATRIA TULUNGAGUNG hadir dengan empat pilar utama untuk memperkuat fondasi organisasi.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-[2rem] border border-slate-700 hover:border-emerald-500/50 hover:bg-slate-800 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-emerald-400 transition-colors">Administrasi Terpadu</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Mengintegrasikan data anggota, struktur unit, dan surat-menyurat dalam satu ekosistem digital yang terpusat.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-[2rem] border border-slate-700 hover:border-emerald-500/50 hover:bg-slate-800 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-blue-400 transition-colors">Efisiensi & Akurasi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Memangkas birokrasi, mempercepat proses administratif, dan menjamin validitas data setiap kader.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-[2rem] border border-slate-700 hover:border-emerald-500/50 hover:bg-slate-800 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center text-purple-400 mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-purple-400 transition-colors">Digitalisasi Gerakan</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Menjawab tantangan zaman dengan transformasi digital. Menjadikan Ansor organisasi yang modern dan adaptif.</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-slate-800/50 backdrop-blur-sm p-8 rounded-[2rem] border border-slate-700 hover:border-emerald-500/50 hover:bg-slate-800 transition-all duration-300 group">
+                    <div class="w-14 h-14 bg-yellow-500/20 rounded-2xl flex items-center justify-center text-yellow-400 mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-yellow-400 transition-colors">Kemandirian Organisasi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Memperkuat basis data potensi kader untuk pengembangan kemandirian ekonomi dan organisasi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontak" class="bg-white pt-20 pb-10 px-4 mt-[-4rem] rounded-t-[4rem] relative z-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-10 border-b border-gray-100">
+                <div class="flex items-center gap-4">
+                    <img src="{{ asset('img/logo.png') }}" class="h-16 w-auto grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all" alt="Logo">
+                    <div>
+                        <h4 class="font-black text-slate-800 text-lg uppercase">PC GP Ansor</h4>
+                        <p class="text-slate-500 text-sm">Kabupaten Tulungagung</p>
+                    </div>
+                </div>
+                <div class="flex gap-6">
+                    <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 hover:bg-emerald-600 hover:text-white transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 hover:bg-rose-600 hover:text-white transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="text-center pt-8">
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">
+                    &copy; {{ date('Y') }} SATRIA TULUNGAGUNG. All Rights Reserved.
+                </p>
+            </div>
+        </div>
     </footer>
 
+    <style>
+        @keyframes bounce-slow {
+
+            0%,
+            100% {
+                transform: translateY(-5%) rotate(6deg);
+            }
+
+            50% {
+                transform: translateY(5%) rotate(6deg);
+            }
+        }
+
+        .animate-bounce-slow {
+            animation: bounce-slow 6s infinite ease-in-out;
+        }
+    </style>
+
 </body>
+
 </html>

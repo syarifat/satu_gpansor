@@ -59,11 +59,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                // Gunakan base_path agar mengarah ke folder project utama
-                PDO::MYSQL_ATTR_SSL_CA => base_path('certs/' . env('MYSQL_ATTR_SSL_CA')),
-                
-                // TiDB Serverless butuh verifikasi ini false jika sertifikatnya umum/bundle
-                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 

@@ -10,17 +10,26 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'nama', 'email', 'password', 
-        'organisasi_unit_id', 'role', 'is_active'
+        'nama',
+        'email',
+        'password',
+        'organisasi_unit_id',
+        'role',
+        'is_active',
+        'google_id',
+        'avatar',
+        'email_verified_at'
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
         'password' => 'hashed',
+        'email_verified_at' => 'datetime',
     ];
 
     // Relasi
@@ -35,17 +44,20 @@ class User extends Authenticatable
     }
 
     // Cek apakah user adalah Admin PC
-    public function isAdminPc() {
+    public function isAdminPc()
+    {
         return $this->role === 'admin_pc';
     }
 
     // Cek apakah user adalah Admin PAC
-    public function isAdminPac() {
+    public function isAdminPac()
+    {
         return $this->role === 'admin_pac';
     }
 
     // Cek apakah user adalah Admin PR
-    public function isAdminPr() {
+    public function isAdminPr()
+    {
         return $this->role === 'admin_pr';
     }
 }

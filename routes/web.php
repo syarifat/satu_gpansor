@@ -31,20 +31,20 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'profile.complete'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     // API untuk mendapatkan daftar desa berdasarkan kecamatan (untuk dropdown dinamis)
     Route::get('/api/wilayah/desa/{kecamatan_id}', [WilayahController::class, 'getDesaByKecamatan'])
-         ->name('api.wilayah.desa');
+        ->name('api.wilayah.desa');
 });
 
 // Hanya Admin PC yang bisa akses
-Route::middleware(['auth', 'role:admin_pc'])->prefix('admin-pc')->name('admin_pc.')->group(function () {
+Route::middleware(['auth', 'profile.complete', 'role:admin_pc'])->prefix('admin-pc')->name('admin_pc.')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin_pc.dashboard');
     })->name('dashboard');
@@ -62,7 +62,7 @@ Route::middleware(['auth', 'role:admin_pc'])->prefix('admin-pc')->name('admin_pc
 });
 
 // Admin PAC & PC bisa akses (PR dilarang)
-Route::middleware(['auth', 'role:admin_pac'])->prefix('admin-pac')->name('admin_pac.')->group(function () {
+Route::middleware(['auth', 'profile.complete', 'role:admin_pac'])->prefix('admin-pac')->name('admin_pac.')->group(function () {
     Route::get('/dashboard', [PacDashboard::class, 'index'])->name('dashboard');
     Route::resource('ranting', RantingController::class);
     Route::resource('anggota', PacAnggota::class);
@@ -70,18 +70,20 @@ Route::middleware(['auth', 'role:admin_pac'])->prefix('admin-pac')->name('admin_
     Route::resource('agenda', PacAgenda::class);
 });
 
-Route::middleware(['auth', 'role:admin_pr'])->prefix('admin-pr')->name('admin_pr.')->group(function () {
+Route::middleware(['auth', 'profile.complete', 'role:admin_pr'])->prefix('admin-pr')->name('admin_pr.')->group(function () {
     Route::get('/dashboard', [PrDashboard::class, 'index'])->name('dashboard');
     Route::resource('anggota', PrAnggota::class);
     Route::resource('surat', PrSurat::class);
     Route::resource('agenda', PrAgenda::class);
 });
 
-Route::middleware(['auth', 'role:anggota'])->prefix('anggota')->name('anggota.')->group(function () {
+Route::middleware(['auth', 'profile.complete', 'role:anggota'])->prefix('anggota')->name('anggota.')->group(function () {
     Route::get('/dashboard', [AnggotaDashboard::class, 'index'])->name('dashboard');
+    Route::get('/profile/edit', [\App\Http\Controllers\Anggota\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\Anggota\ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::get('/desa/{kecamatan_id}', function ($kecamatan_id) {
     return \App\Models\Desa::where('kecamatan_id', $kecamatan_id)->get(['id', 'nama']);
 });
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

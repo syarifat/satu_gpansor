@@ -4,8 +4,8 @@
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('anggota.dashboard') }}">
-                        <div class="font-black text-emerald-700 text-2xl tracking-tighter uppercase">
-                            Satu <span class="text-slate-800">Ansor</span>
+                        <div class="font-black text-emerald-700 text-lg tracking-tighter uppercase whitespace-nowrap">
+                            SATRIA <span class="text-slate-800">TULUNGAGUNG</span>
                         </div>
                     </a>
                 </div>
@@ -28,7 +28,7 @@
                         </button>
                     </x-slot>
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">⚙️ Profile</x-dropdown-link>
+                        <x-dropdown-link :href="route('anggota.profile.edit')">⚙️ Edit Profil</x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 font-bold">🚪 Log Out</x-dropdown-link>
@@ -48,26 +48,26 @@
     </div>
 
     <div x-show="open" class="relative z-50 lg:hidden" aria-modal="true">
-        <div x-show="open" 
-             x-transition:enter="transition-opacity ease-linear duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity ease-linear duration-300"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-gray-900/80" 
-             @click="open = false"></div>
+        <div x-show="open"
+            x-transition:enter="transition-opacity ease-linear duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-linear duration-300"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-gray-900/80"
+            @click="open = false"></div>
 
         <div class="fixed inset-0 flex">
-            <div x-show="open" 
-                 x-transition:enter="transition ease-in-out duration-300 transform"
-                 x-transition:enter-start="translate-x-full"
-                 x-transition:enter-end="translate-x-0"
-                 x-transition:leave="transition ease-in-out duration-300 transform"
-                 x-transition:leave-start="translate-x-0"
-                 x-transition:leave-end="translate-x-full"
-                 class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                
+            <div x-show="open"
+                x-transition:enter="transition ease-in-out duration-300 transform"
+                x-transition:enter-start="translate-x-full"
+                x-transition:enter-end="translate-x-0"
+                x-transition:leave="transition ease-in-out duration-300 transform"
+                x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="translate-x-full"
+                class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+
                 <div class="flex items-center justify-between px-4 pb-4 border-b border-gray-100">
                     <span class="text-lg font-black text-emerald-700 uppercase">Menu</span>
                     <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-50 hover:text-gray-500" @click="open = false">
@@ -82,11 +82,11 @@
                     <x-responsive-nav-link :href="route('anggota.dashboard')" :active="request()->routeIs('anggota.dashboard')">
                         Dashboard Anggota
                     </x-responsive-nav-link>
-                    
+
                     <div class="border-t border-gray-100 my-4"></div>
-                    
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        Profile Settings
+
+                    <x-responsive-nav-link :href="route('anggota.profile.edit')">
+                        Edit Profil
                     </x-responsive-nav-link>
 
                     <form method="POST" action="{{ route('logout') }}">

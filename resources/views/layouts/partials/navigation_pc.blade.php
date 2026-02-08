@@ -4,8 +4,8 @@
             <div class="flex">
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <div class="font-black text-emerald-700 text-2xl tracking-tighter uppercase">
-                            Satu <span class="text-slate-800">Ansor</span>
+                        <div class="font-black text-emerald-700 text-lg tracking-tighter uppercase whitespace-nowrap">
+                            SATRIA <span class="text-slate-800">TULUNGAGUNG</span>
                         </div>
                     </a>
                 </div>
@@ -32,7 +32,7 @@
                             <x-dropdown-link :href="route('admin_pc.index-surat.index')">📑 Index Surat</x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
-                    
+
                     <x-nav-link :href="route('admin_pc.anggota.index')" :active="request()->routeIs('admin_pc.anggota.*')">
                         Database Anggota
                     </x-nav-link>
@@ -42,7 +42,7 @@
                     </x-nav-link>
 
                     <x-dropdown align="left" width="48">
-                         <x-slot name="trigger">
+                        <x-slot name="trigger">
                             <button class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-bold leading-5 transition text-gray-500 hover:text-gray-700 border-transparent">
                                 <div>Administrasi</div>
                                 <div class="ms-1">
@@ -94,26 +94,26 @@
     </div>
 
     <div x-show="open" class="relative z-50 lg:hidden" aria-modal="true" style="display: none;">
-        <div x-show="open" 
-             x-transition:enter="transition-opacity ease-linear duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity ease-linear duration-300"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-gray-900/80" 
-             @click="open = false"></div>
+        <div x-show="open"
+            x-transition:enter="transition-opacity ease-linear duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-linear duration-300"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-gray-900/80"
+            @click="open = false"></div>
 
         <div class="fixed inset-0 flex">
-            <div x-show="open" 
-                 x-transition:enter="transition ease-in-out duration-300 transform"
-                 x-transition:enter-start="translate-x-full"
-                 x-transition:enter-end="translate-x-0"
-                 x-transition:leave="transition ease-in-out duration-300 transform"
-                 x-transition:leave-start="translate-x-0"
-                 x-transition:leave-end="translate-x-full"
-                 class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                
+            <div x-show="open"
+                x-transition:enter="transition ease-in-out duration-300 transform"
+                x-transition:enter-start="translate-x-full"
+                x-transition:enter-end="translate-x-0"
+                x-transition:leave="transition ease-in-out duration-300 transform"
+                x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="translate-x-full"
+                class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+
                 <div class="flex items-center justify-between px-4 pb-4 border-b border-gray-100">
                     <span class="text-lg font-black text-emerald-700 uppercase">Menu PC</span>
                     <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-50 hover:text-gray-500 focus:outline-none" @click="open = false">
@@ -126,14 +126,14 @@
 
                 <div class="mt-4 px-4 space-y-1">
                     <x-responsive-nav-link :href="route('admin_pc.dashboard')" :active="request()->routeIs('admin_pc.dashboard')">Dashboard</x-responsive-nav-link>
-                    
+
                     <div class="pt-4 pb-1">
                         <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Master Data</p>
                         <x-responsive-nav-link :href="route('admin_pc.unit-organisasi.index')" :active="request()->routeIs('admin_pc.unit-organisasi.*')">🏢 Unit Organisasi</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin_pc.jabatan.index')" :active="request()->routeIs('admin_pc.jabatan.*')">👔 Jabatan</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin_pc.index-surat.index')" :active="request()->routeIs('admin_pc.index-surat.*')">📑 Index Surat</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin_pc.anggota.index')" :active="request()->routeIs('admin_pc.anggota.*')">👥 Database Anggota</x-responsive-nav-link>
-                        
+
                         <x-responsive-nav-link :href="route('admin_pc.pekerjaan.index')" :active="request()->routeIs('admin_pc.pekerjaan.*')">💼 Data Profesi Kader</x-responsive-nav-link>
                     </div>
 
@@ -145,7 +145,7 @@
 
                     <div class="border-t border-gray-100 my-4"></div>
                     <x-responsive-nav-link :href="route('profile.edit')">⚙️ Profile Settings</x-responsive-nav-link>
-                    
+
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 font-bold">

@@ -50,7 +50,7 @@
                         <div class="relative z-10 p-8 flex flex-col justify-between h-full text-white">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <h5 class="font-black text-xl uppercase tracking-tighter italic">Satu Ansor</h5>
+                                    <h5 class="font-black text-xl uppercase tracking-tighter italic">SATRIA TULUNGAGUNG</h5>
                                     <p class="text-[10px] uppercase tracking-widest opacity-80">Kartu Tanda Anggota</p>
                                 </div>
 
@@ -61,7 +61,9 @@
 
                             <div class="flex items-end gap-6">
                                 <div class="w-24 h-24 bg-white rounded-xl shadow-lg border-2 border-white/50 flex items-center justify-center text-slate-300">
-                                    <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                    <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
                                 </div>
 
                                 <div class="space-y-1 mb-1">
@@ -88,7 +90,9 @@
 
                     <div class="mt-2 flex justify-center">
                         <button onclick="window.print()" class="px-6 py-2 bg-slate-800 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-900 transition-all shadow-lg flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
                             Download KTA
                         </button>
                     </div>
@@ -125,8 +129,8 @@
                         </div>
 
                         <div class="pt-2">
-                            <a href="{{ route('profile.edit') }}" class="block w-full py-3 border-2 border-slate-100 text-slate-500 rounded-2xl text-[10px] font-black uppercase text-center tracking-widest hover:bg-slate-50 transition-all">
-                                Edit Data Akun
+                            <a href="{{ route('anggota.profile.edit') }}" class="block w-full py-3 border-2 border-slate-100 text-slate-500 rounded-2xl text-[10px] font-black uppercase text-center tracking-widest hover:bg-slate-50 transition-all">
+                                Edit Data Profil
                             </a>
                         </div>
                     </div>

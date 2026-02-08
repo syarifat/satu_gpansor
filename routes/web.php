@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminPc\UnitOrganisasiController;
 use App\Http\Controllers\WilayahController;
@@ -42,9 +43,18 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified', 'profile.complete'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Profile routes untuk Admin (PC, PAC, PR)
+    Route::middleware(['role:admin_pc,admin_pac,admin_pr'])->group(function () {
+        Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+        Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+    });
+
+    // Profile routes untuk Anggota biasa (menggunakan ProfileController lama)
+    Route::middleware(['role:anggota'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 
     // API untuk mendapatkan daftar desa berdasarkan kecamatan (untuk dropdown dinamis)
     Route::get('/api/wilayah/desa/{kecamatan_id}', [WilayahController::class, 'getDesaByKecamatan'])
@@ -77,6 +87,7 @@ Route::middleware(['auth', 'profile.complete', 'role:admin_pac'])->prefix('admin
     Route::get('/dashboard', [PacDashboard::class, 'index'])->name('dashboard');
     Route::resource('ranting', RantingController::class);
     Route::resource('anggota', PacAnggota::class);
+    Route::get('/anggota-export-pdf', [PacAnggota::class, 'exportPdf'])->name('anggota.export-pdf');
     Route::resource('surat', PacSurat::class);
     Route::resource('agenda', PacAgenda::class);
 });

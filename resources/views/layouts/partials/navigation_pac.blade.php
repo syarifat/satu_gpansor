@@ -1,73 +1,106 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100 relative shadow-sm">
+<nav x-data="{ open: false }" class="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
+
+            {{-- 1. LEFT SIDE: LOGO & DESKTOP MENU --}}
             <div class="flex">
+                {{-- Logo --}}
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('admin_pac.dashboard') }}">
-                        <div class="font-black text-indigo-700 text-lg tracking-tighter uppercase whitespace-nowrap">
+                    <a href="{{ route('dashboard') }}" class="group">
+                        <div class="font-black text-emerald-700 text-lg tracking-tighter uppercase whitespace-nowrap group-hover:opacity-80 transition-opacity">
                             SATRIA <span class="text-slate-800">TULUNGAGUNG</span>
                         </div>
                     </a>
                 </div>
-                <div class="hidden space-x-6 sm:-my-px sm:ms-10 lg:flex items-center">
-                    <x-nav-link :href="route('admin_pac.dashboard')" :active="request()->routeIs('admin_pac.dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                    <x-dropdown align="left" width="48">
-                        <x-slot name="trigger">
-                            <button class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-bold leading-5 transition {{ request()->routeIs('admin_pac.ranting.*') || request()->routeIs('admin_pac.anggota.*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
-                                <div>{{ __('Master Data') }}</div>
-                                <div class="ms-1"><svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                    </svg></div>
-                            </button>
-                        </x-slot>
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('admin_pac.ranting.index')">🏢 Pimpinan Ranting</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin_pac.anggota.index')">👥 Data Anggota</x-dropdown-link>
-                        </x-slot>
-                    </x-dropdown>
 
-                    <x-dropdown align="left" width="48">
-                        <x-slot name="trigger">
-                            <button class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-bold leading-5 transition {{ request()->routeIs('admin_pac.surat.*') || request()->routeIs('admin_pac.agenda.*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700' }}">
-                                <div>{{ __('Administrasi') }}</div>
-                                <div class="ms-1"><svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
-                                        <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                    </svg></div>
-                            </button>
-                        </x-slot>
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('admin_pac.surat.index')">📩 Pengajuan Surat</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin_pac.agenda.index')">📅 Agenda Kegiatan</x-dropdown-link>
-                        </x-slot>
-                    </x-dropdown>
+                {{-- Desktop Menu (WITH SEPARATORS) --}}
+                <div class="hidden space-x-4 sm:-my-px sm:ms-10 lg:flex items-center">
+
+                    <x-nav-link :href="route('admin_pac.dashboard')" :active="request()->routeIs('admin_pac.dashboard')">
+                        Dashboard
+                    </x-nav-link>
+
+                    {{-- Separator --}}
+                    <span class="text-slate-300 font-light select-none">|</span>
+
+                    {{-- Dropdown Master Data --}}
+                    <div class="hidden sm:flex sm:items-center">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-bold leading-5 transition duration-150 ease-in-out focus:outline-none {{ request()->routeIs('admin_pac.ranting.*') || request()->routeIs('admin_pac.anggota.*') ? 'border-emerald-500 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}">
+                                    <div>Master Data</div>
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('admin_pac.ranting.index')">Pimpinan Ranting</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin_pac.anggota.index')">Data Anggota</x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+
+                    {{-- Separator --}}
+                    <span class="text-slate-300 font-light select-none">|</span>
+
+                    {{-- Dropdown Administrasi --}}
+                    <div class="hidden sm:flex sm:items-center">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-bold leading-5 transition duration-150 ease-in-out focus:outline-none {{ request()->routeIs('admin_pac.surat.*') || request()->routeIs('admin_pac.agenda.*') ? 'border-emerald-500 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300' }}">
+                                    <div>Administrasi</div>
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('admin_pac.surat.index')">Pengajuan Surat</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin_pac.agenda.index')">Agenda Kegiatan</x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                 </div>
             </div>
 
+            {{-- 2. RIGHT SIDE: USER PROFILE (DESKTOP) --}}
             <div class="hidden lg:flex sm:items-center sm:ms-6">
-                <div class="flex flex-col items-end mr-3">
-                    <span class="text-xs font-black text-indigo-600 uppercase">{{ Auth::user()->nama }}</span>
-                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Admin PAC</span>
+                <div class="flex flex-col items-end mr-3 text-right">
+                    <span class="text-xs font-black text-emerald-700 uppercase tracking-wide">{{ Auth::user()->nama }}</span>
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-2 py-0.5 rounded-md">Admin PAC</span>
                 </div>
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="w-10 h-10 rounded-full bg-indigo-700 flex items-center justify-center text-white font-black text-sm uppercase hover:bg-indigo-800 transition-colors shadow-md shadow-indigo-200">
+                        <button class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-white font-black text-sm uppercase hover:shadow-lg hover:ring-2 hover:ring-emerald-200 transition-all cursor-pointer">
                             {{ substr(Auth::user()->nama, 0, 1) }}
                         </button>
                     </x-slot>
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">⚙️ Profile</x-dropdown-link>
+                        <div class="px-4 py-3 border-b border-gray-100">
+                            <p class="text-xs text-slate-500">Login sebagai</p>
+                            <p class="text-sm font-bold text-slate-800">{{ Auth::user()->email }}</p>
+                        </div>
+                        <x-dropdown-link :href="route('admin.profile.edit')">
+                            Profile Settings
+                        </x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 font-bold">🚪 Log Out</x-dropdown-link>
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-rose-600 font-bold hover:bg-rose-50">
+                                Log Out
+                            </x-dropdown-link>
                         </form>
                     </x-slot>
                 </x-dropdown>
             </div>
 
+            {{-- 3. MOBILE HAMBURGER BUTTON --}}
             <div class="-me-2 flex items-center lg:hidden">
-                <button @click="open = true" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition">
+                <button @click="open = true" class="inline-flex items-center justify-center p-2 rounded-xl text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition focus:outline-none">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -76,7 +109,10 @@
         </div>
     </div>
 
-    <div x-show="open" class="relative z-50 lg:hidden" aria-modal="true">
+    {{-- 4. MOBILE OFF-CANVAS MENU (WITH ICONS) --}}
+    <div x-show="open" class="relative z-50 lg:hidden" aria-modal="true" style="display: none;">
+
+        {{-- Backdrop --}}
         <div x-show="open"
             x-transition:enter="transition-opacity ease-linear duration-300"
             x-transition:enter-start="opacity-0"
@@ -84,10 +120,11 @@
             x-transition:leave="transition-opacity ease-linear duration-300"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-gray-900/80"
+            class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
             @click="open = false"></div>
 
-        <div class="fixed inset-0 flex">
+        {{-- Drawer --}}
+        <div class="fixed inset-0 flex justify-end">
             <div x-show="open"
                 x-transition:enter="transition ease-in-out duration-300 transform"
                 x-transition:enter-start="translate-x-full"
@@ -95,38 +132,97 @@
                 x-transition:leave="transition ease-in-out duration-300 transform"
                 x-transition:leave-start="translate-x-0"
                 x-transition:leave-end="translate-x-full"
-                class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+                class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-2xl">
 
-                <div class="flex items-center justify-between px-4 pb-4 border-b border-gray-100">
-                    <span class="text-lg font-black text-indigo-700 uppercase">Menu PAC</span>
-                    <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-50 hover:text-gray-500" @click="open = false">
+                {{-- Mobile Header --}}
+                <div class="flex items-center justify-between px-6 pb-6 border-b border-slate-100">
+                    <div>
+                        <span class="block text-lg font-black text-emerald-700 uppercase tracking-tight">MENU PAC</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Satria Tulungagung</span>
+                    </div>
+                    <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition focus:outline-none" @click="open = false">
                         <span class="sr-only">Close menu</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
 
-                <div class="mt-4 px-4 space-y-1">
-                    <x-responsive-nav-link :href="route('admin_pac.dashboard')" :active="request()->routeIs('admin_pac.dashboard')">Dashboard</x-responsive-nav-link>
+                {{-- Mobile Links (WITH ICONS) --}}
+                <div class="mt-6 px-4 space-y-1">
 
-                    <div class="pt-4 pb-1">
-                        <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Master Data</p>
-                        <x-responsive-nav-link :href="route('admin_pac.ranting.index')" :active="request()->routeIs('admin_pac.ranting.*')">🏢 Pimpinan Ranting</x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('admin_pac.anggota.index')" :active="request()->routeIs('admin_pac.anggota.*')">👥 Data Anggota</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin_pac.dashboard')" :active="request()->routeIs('admin_pac.dashboard')" class="flex items-center gap-3">
+                        <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                        </svg>
+                        Dashboard
+                    </x-responsive-nav-link>
+
+                    <div class="pt-6 pb-2">
+                        <p class="px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Master Data</p>
+
+                        <x-responsive-nav-link :href="route('admin_pac.ranting.index')" :active="request()->routeIs('admin_pac.ranting.*')" class="flex items-center gap-3">
+                            <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                            Pimpinan Ranting
+                        </x-responsive-nav-link>
+
+                        <x-responsive-nav-link :href="route('admin_pac.anggota.index')" :active="request()->routeIs('admin_pac.anggota.*')" class="flex items-center gap-3">
+                            <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                            Data Anggota
+                        </x-responsive-nav-link>
                     </div>
 
                     <div class="pt-2 pb-1">
-                        <p class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Administrasi</p>
-                        <x-responsive-nav-link :href="route('admin_pac.surat.index')" :active="request()->routeIs('admin_pac.surat.*')">📩 Pengajuan Surat</x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('admin_pac.agenda.index')" :active="request()->routeIs('admin_pac.agenda.*')">📅 Agenda Kegiatan</x-responsive-nav-link>
+                        <p class="px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Administrasi</p>
+
+                        <x-responsive-nav-link :href="route('admin_pac.surat.index')" :active="request()->routeIs('admin_pac.surat.*')" class="flex items-center gap-3">
+                            <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            Pengajuan Surat
+                        </x-responsive-nav-link>
+
+                        <x-responsive-nav-link :href="route('admin_pac.agenda.index')" :active="request()->routeIs('admin_pac.agenda.*')" class="flex items-center gap-3">
+                            <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            Agenda Kegiatan
+                        </x-responsive-nav-link>
                     </div>
 
-                    <div class="border-t border-gray-100 my-4"></div>
-                    <x-responsive-nav-link :href="route('profile.edit')">⚙️ Profile Settings</x-responsive-nav-link>
+                    <div class="border-t border-slate-100 my-4"></div>
+
+                    {{-- User Mobile Profile --}}
+                    <div class="px-4 py-2 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white font-black text-sm uppercase">
+                            {{ substr(Auth::user()->nama, 0, 1) }}
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-800 text-sm">{{ Auth::user()->nama }}</div>
+                            <div class="text-xs text-slate-500">{{ Auth::user()->email }}</div>
+                        </div>
+                    </div>
+
+                    <x-responsive-nav-link :href="route('admin.profile.edit')" class="flex items-center gap-3">
+                        <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Profile Settings
+                    </x-responsive-nav-link>
+
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 font-bold">🚪 Log Out</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-rose-600 font-bold flex items-center gap-3">
+                            <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Log Out
+                        </x-responsive-nav-link>
                     </form>
                 </div>
             </div>

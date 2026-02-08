@@ -19,9 +19,9 @@ class AnggotaController extends Controller
 
         // Filter Pencarian Nama/NIK
         if ($request->search) {
-            $query->where(function($q) use ($request) {
+            $query->where(function ($q) use ($request) {
                 $q->where('nama', 'like', "%{$request->search}%")
-                  ->orWhere('nik', 'like', "%{$request->search}%");
+                    ->orWhere('nik', 'like', "%{$request->search}%");
             });
         }
 
@@ -31,7 +31,7 @@ class AnggotaController extends Controller
         }
 
         $anggotas = $query->latest()->paginate(10)->withQueryString();
-        
+
         // Data untuk Dropdown Filter
         $pacs = OrganisasiUnit::where('level', 'pac')->orderBy('nama', 'asc')->get();
 
@@ -73,7 +73,7 @@ class AnggotaController extends Controller
         $anggota->user->update(['nama' => $request->nama]);
 
         return redirect()->route('admin_pc.anggota.index')
-                        ->with('success', 'Data anggota berhasil diperbarui.');
+            ->with('success', 'Data anggota berhasil diperbarui.');
     }
 
     public function destroy(Anggota $anggota)
@@ -84,6 +84,65 @@ class AnggotaController extends Controller
         $user->delete();
 
         return redirect()->route('admin_pc.anggota.index')
-                        ->with('success', 'Anggota dan akun login berhasil dihapus.');
+            ->with('success', 'Anggota dan akun login berhasil dihapus.');
+    }
+
+    /**
+     * Jadikan Anggota sebagai Admin Unit
+     */
+    public function promoteToAdmin(Request $request, Anggota $anggota)
+    {
+        $organisasiUnit = $anggota->organisasiUnit;
+
+        // Tentukan Role Baru berdasarkan Level Unit
+        if ($organisasiUnit->level === 'pac') {
+            $newRole = 'admin_pac';
+            $jabatanId = 2; // Asumsi ID 2 = Ketua PAC (Sesuaikan dengan seeder Jabatan)
+        } elseif ($organisasiUnit->level === 'pr') {
+            $newRole = 'admin_pr';
+            $jabatanId = 3; // Asumsi ID 3 = Ketua Ranting
+        } else {
+            return back()->with('error', 'Anggota ini berada di level PC atau unit tidak valid untuk jadi admin.');
+        }
+
+        // Cek apakah unit sudah punya admin
+        $existingAdmin = User::where('organisasi_unit_id', $organisasiUnit->id)
+            ->where('role', $newRole)
+            ->where('id', '!=', $anggota->user_id) // Kecuali diri sendiri (idempotent)
+            ->first();
+
+        if ($existingAdmin) {
+            return back()->with('error', "Gagal! Unit {$organisasiUnit->nama} sudah memiliki admin: {$existingAdmin->nama}.");
+        }
+
+        // Jalankan Update dalam Transaksi
+        DB::transaction(function () use ($anggota, $newRole, $jabatanId) {
+            // 1. Update Role User
+            $anggota->user->update(['role' => $newRole]);
+
+            // 2. Update Jabatan Anggota (Opsional, tapi baik untuk data)
+            // Cek dulu apakah jabatan ada, kalau gak ada biarkan jabatan lama
+            if (Jabatan::find($jabatanId)) {
+                $anggota->update(['jabatan_id' => $jabatanId]);
+            }
+        });
+
+        return back()->with('success', "Berhasil! {$anggota->nama} sekarang adalah Admin {$organisasiUnit->nama}.");
+    }
+
+    /**
+     * Copot Admin (Kembali jadi Anggota)
+     */
+    public function demoteToMember(Anggota $anggota)
+    {
+        DB::transaction(function () use ($anggota) {
+            // 1. Kembalikan Role ke Anggota
+            $anggota->user->update(['role' => 'anggota']);
+
+            // 2. Kembalikan Jabatan ke Anggota (ID 10)
+            $anggota->update(['jabatan_id' => 10]);
+        });
+
+        return back()->with('success', "Akses admin {$anggota->nama} dicabut. Kembali menjadi Anggota biasa.");
     }
 }

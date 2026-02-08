@@ -7,7 +7,7 @@
 
     <div class="py-8 md:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-            
+
             {{-- 1. Filter & Search Card --}}
             <div class="p-6 bg-white shadow-xl rounded-[2.5rem] border border-gray-100">
                 <form action="{{ route('admin_pc.anggota.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -20,7 +20,7 @@
                         <select name="unit_id" class="w-full rounded-2xl border-gray-100 bg-slate-50 text-sm font-bold focus:ring-emerald-500">
                             <option value="">Semua PAC</option>
                             @foreach($pacs as $pac)
-                                <option value="{{ $pac->id }}" {{ request('unit_id') == $pac->id ? 'selected' : '' }}>{{ $pac->nama }}</option>
+                            <option value="{{ $pac->id }}" {{ request('unit_id') == $pac->id ? 'selected' : '' }}>{{ $pac->nama }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -68,9 +68,27 @@
                                     <div class="text-[10px] text-slate-400 font-medium italic capitalize">{{ $agt->organisasiUnit->level }}</div>
                                 </td>
                                 <td class="px-8 py-5 text-center">
-                                    <a href="{{ route('admin_pc.anggota.show', $agt->id) }}" class="inline-block p-2 bg-slate-100 text-slate-600 rounded-xl hover:bg-emerald-700 hover:text-white transition-all shadow-sm">
-                                        👁️ Lihat Detail
-                                    </a>
+                                    <div class="flex flex-col gap-2">
+                                        <a href="{{ route('admin_pc.anggota.show', $agt->id) }}" class="inline-block p-2 bg-slate-100 text-slate-600 rounded-xl hover:bg-emerald-700 hover:text-white transition-all shadow-sm">
+                                            👁️ Lihat Detail
+                                        </a>
+
+                                        @if($agt->user->role === 'admin_pac' || $agt->user->role === 'admin_pr')
+                                        <form action="{{ route('admin_pc.anggota.demote', $agt->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mencabut akses admin dari anggota ini?');">
+                                            @csrf
+                                            <button type="submit" class="w-full px-3 py-2 bg-rose-100 text-rose-600 rounded-xl hover:bg-rose-600 hover:text-white transition-all text-[10px] font-bold uppercase tracking-wide">
+                                                🚫 Copot Admin
+                                            </button>
+                                        </form>
+                                        @elseif($agt->organisasiUnit->level !== 'pc')
+                                        <form action="{{ route('admin_pc.anggota.promote', $agt->id) }}" method="POST" onsubmit="return confirm('Jadikan anggota ini sebagai Admin Unit {{ $agt->organisasiUnit->nama }}?');">
+                                            @csrf
+                                            <button type="submit" class="w-full px-3 py-2 bg-sky-100 text-sky-600 rounded-xl hover:bg-sky-600 hover:text-white transition-all text-[10px] font-bold uppercase tracking-wide">
+                                                ⭐ Jadikan Admin
+                                            </button>
+                                        </form>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach

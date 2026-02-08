@@ -60,77 +60,35 @@
                 </div>
                 @endif
 
-                {{-- REGISTRATION TYPE SELECTION --}}
+                {{-- GOOGLE LOGIN BUTTON --}}
                 <div class="space-y-4">
-                    {{-- REGISTER AS ANGGOTA --}}
-                    <a href="{{ route('auth.google.register', ['type' => 'anggota']) }}"
-                        class="flex items-center justify-between w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 rounded-2xl transition-all duration-200 group shadow-md hover:shadow-lg">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                            </div>
-                            <div class="text-left">
-                                <span class="block text-sm font-bold text-white">Daftar sebagai Anggota</span>
-                                <span class="block text-[10px] text-emerald-100">Kader GP Ansor Tulungagung</span>
-                            </div>
-                        </div>
-                        <svg class="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                    </a>
-
-                    {{-- REGISTER AS ADMIN --}}
-                    <a href="{{ route('auth.google.register', ['type' => 'admin']) }}"
-                        class="flex items-center justify-between w-full py-4 px-6 bg-slate-700 hover:bg-slate-800 rounded-2xl transition-all duration-200 group shadow-md hover:shadow-lg">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <div class="text-left">
-                                <span class="block text-sm font-bold text-white">Daftar sebagai Admin Unit</span>
-                                <span class="block text-[10px] text-slate-300">Admin PAC / PR (1 per unit)</span>
-                            </div>
-                        </div>
-                        <svg class="w-5 h-5 text-white/70 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
+                    <a href="{{ route('auth.google.register') }}" class="flex items-center justify-center w-full py-4 px-6 bg-white border-2 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30 text-slate-700 hover:text-emerald-700 rounded-2xl transition-all duration-300 group shadow-sm hover:shadow-lg transform hover:-translate-y-0.5">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6 mr-3" alt="Google Logo">
+                        <span class="text-sm font-black tracking-wide uppercase">Masuk dengan Google</span>
                     </a>
                 </div>
 
-                {{-- DIVIDER --}}
-                <div class="relative flex py-6 items-center">
+                {{-- INFO DIVIDER --}}
+                <div class="relative flex py-8 items-center">
                     <div class="flex-grow border-t border-gray-100"></div>
-                    <span class="flex-shrink-0 mx-4 text-[10px] text-slate-300 font-bold uppercase tracking-widest">INFO</span>
+                    <span class="flex-shrink-0 mx-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">INFO</span>
                     <div class="flex-grow border-t border-gray-100"></div>
                 </div>
 
-                {{-- INFO BOX --}}
-                <div class="space-y-3">
-                    <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 mt-0.5">
-                                <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <p class="text-[11px] text-emerald-700 font-medium leading-relaxed">
-                                <strong>Anggota:</strong> Daftar sebagai kader GP Ansor untuk mendapatkan KTA Digital.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                        <div class="flex items-start gap-3">
-                            <div class="flex-shrink-0 mt-0.5">
-                                <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-emerald-50 rounded-2xl p-5 border border-emerald-100/50">
+                    <div class="flex gap-4">
+                        <div class="flex-shrink-0 mt-1">
+                            <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <p class="text-[11px] text-slate-600 font-medium leading-relaxed">
-                                <strong>Admin Unit:</strong> Kelola unit PAC/PR Anda. Setiap unit hanya boleh 1 admin.
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-black text-emerald-800 uppercase tracking-wide mb-1">Pendaftaran Anggota</h4>
+                            <p class="text-[11px] text-slate-600 leading-relaxed">
+                                Gunakan akun Google Anda untuk mendaftar sebagai Anggota GP Ansor.
+                                <br>Untuk <strong>Admin Unit</strong>, silakan daftar sebagai anggota biasa terlebih dahulu, lalu hubungi Admin PC untuk aktivasi akses admin.
                             </p>
                         </div>
                     </div>

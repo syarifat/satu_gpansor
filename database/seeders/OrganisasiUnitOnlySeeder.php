@@ -39,9 +39,9 @@ class OrganisasiUnitOnlySeeder extends Seeder
                 'parent_id' => $pc->id,
                 'kecamatan_id' => $kec->id,
                 'desa_id' => null,
-                'alamat_sekretariat' => 'Jl. Raya Kecamatan ' . $kec->nama . ' No. ' . rand(1, 50),
-                'email' => 'pac.' . strtolower(str_replace(' ', '', $kec->nama)) . '@ansor.or.id',
-                'notelp' => '0812' . rand(10000000, 99999999),
+                'alamat_sekretariat' => null, // Biarkan kosong, diisi admin nanti
+                'email' => null,              // Biarkan kosong, diisi admin nanti
+                'notelp' => null,             // Biarkan kosong, diisi admin nanti
             ]);
 
             // BUAT PR (Pimpinan Ranting) per Desa
@@ -54,9 +54,9 @@ class OrganisasiUnitOnlySeeder extends Seeder
                     'parent_id' => $pac->id,
                     'kecamatan_id' => $kec->id,
                     'desa_id' => $desa->id,
-                    'alamat_sekretariat' => 'Jl. Desa ' . $desa->nama . ' RT 01 RW 01',
-                    'email' => 'pr.' . strtolower(str_replace(' ', '', $desa->nama)) . '@ansor.or.id',
-                    'notelp' => '0857' . rand(10000000, 99999999),
+                    'alamat_sekretariat' => null, // Biarkan kosong, diisi admin nanti
+                    'email' => null,              // Biarkan kosong, diisi admin nanti
+                    'notelp' => null,             // Biarkan kosong, diisi admin nanti
                 ]);
             }
         }

@@ -117,6 +117,9 @@ class GoogleAuthController extends Controller
     /**
      * Tampilkan form lengkapi profil
      */
+    /**
+     * Tampilkan form lengkapi profil
+     */
     public function showCompleteProfile()
     {
         $user = Auth::user();
@@ -127,9 +130,9 @@ class GoogleAuthController extends Controller
         }
 
         $kecamatans = Kecamatan::orderBy('nama')->get();
-        $registerType = session('register_type', 'anggota'); // 'anggota' or 'admin'
+        // Default register as anggota
 
-        return view('auth.complete-profile', compact('user', 'kecamatans', 'registerType'));
+        return view('auth.complete-profile', compact('user', 'kecamatans'));
     }
 
     /**
@@ -139,7 +142,9 @@ class GoogleAuthController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $registerType = session('register_type', 'anggota');
+
+        // Hardcode role ke anggota
+        $userRole = 'anggota';
 
         $validated = $request->validate([
             'nik' => 'required|string|size:16|unique:anggotas,nik',
@@ -152,9 +157,12 @@ class GoogleAuthController extends Controller
             'alamat' => 'required|string|max:255',
             'kecamatan_id' => 'required|exists:kecamatans,id',
             'desa_id' => 'required|exists:desas,id',
+
+            // Kaderisasi (Unit Organisasi tempat dia bernaung)
             'tingkatan_organisasi' => 'required|in:pac,pr',
             'unit_kecamatan_id' => 'required|exists:kecamatans,id',
             'unit_desa_id' => 'nullable|exists:desas,id|required_if:tingkatan_organisasi,pr',
+
             'last_education' => 'nullable|string|max:50',
             'job_title' => 'nullable|string|max:100',
             'job_address' => 'nullable|string|max:255',
@@ -174,39 +182,21 @@ class GoogleAuthController extends Controller
             'unit_desa_id.required_if' => 'PR (Desa) wajib dipilih untuk tingkat Ranting',
         ]);
 
-        // Cari organisasi unit berdasarkan pilihan
+        // Cari organisasi unit berdasarkan pilihan (Tempat Kaderisasi)
         if ($validated['tingkatan_organisasi'] === 'pac') {
             $organisasiUnit = OrganisasiUnit::where('level', 'pac')
                 ->where('kecamatan_id', $validated['unit_kecamatan_id'])
                 ->first();
-            $adminRole = 'admin_pac';
         } else {
             $organisasiUnit = OrganisasiUnit::where('level', 'pr')
                 ->where('desa_id', $validated['unit_desa_id'])
                 ->first();
-            $adminRole = 'admin_pr';
         }
 
         if (!$organisasiUnit) {
             return back()->withErrors(['tingkatan_organisasi' => 'Unit organisasi tidak ditemukan.'])
                 ->withInput();
         }
-
-        // Jika mendaftar sebagai admin, cek apakah unit sudah punya admin
-        if ($registerType === 'admin') {
-            $existingAdmin = \App\Models\User::where('organisasi_unit_id', $organisasiUnit->id)
-                ->where('role', $adminRole)
-                ->first();
-
-            if ($existingAdmin) {
-                return back()->withErrors([
-                    'tingkatan_organisasi' => 'Unit ini sudah memiliki admin. Silakan pilih unit lain atau daftar sebagai anggota.'
-                ])->withInput();
-            }
-        }
-
-        // Tentukan role berdasarkan tipe pendaftaran
-        $userRole = $registerType === 'admin' ? $adminRole : 'anggota';
 
         // Update user dengan organisasi unit dan role
         $user->update([
@@ -218,7 +208,7 @@ class GoogleAuthController extends Controller
         Anggota::create([
             'user_id' => $user->id,
             'organisasi_unit_id' => $organisasiUnit->id,
-            'jabatan_id' => 10, // Default: Anggota (sesuaikan ID-nya)
+            'jabatan_id' => 10, // Default: Anggota (sesuaikan ID-nya jika perlu, misal ambil dari DB)
             'nik' => $validated['nik'],
             'nia_ansor' => $validated['nia_ansor'],
             'nama' => $user->nama,
@@ -235,7 +225,7 @@ class GoogleAuthController extends Controller
             'job_address' => $validated['job_address'],
         ]);
 
-        // Clear session
+        // Clear session (just in case)
         session()->forget('register_type');
 
         // Refresh user untuk mendapatkan role terbaru
@@ -243,11 +233,7 @@ class GoogleAuthController extends Controller
 
         $redirectUrl = $this->googleAuthService->getRedirectRoute($user);
 
-        $successMessage = $registerType === 'admin'
-            ? 'Profil berhasil dilengkapi! Anda terdaftar sebagai Admin ' . strtoupper($validated['tingkatan_organisasi']) . '.'
-            : 'Profil berhasil dilengkapi! Selamat bergabung.';
-
         return redirect($redirectUrl)
-            ->with('success', $successMessage);
+            ->with('success', 'Profil berhasil dilengkapi! Selamat bergabung.');
     }
 }

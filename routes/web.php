@@ -48,11 +48,13 @@ Route::middleware(['auth', 'profile.complete', 'role:admin_pc'])->prefix('admin-
     Route::get('/dashboard', function () {
         return view('admin_pc.dashboard');
     })->name('dashboard');
+    // Route::resource('anggota', AnggotaController::class);
+    Route::post('/anggota/{anggota}/promote', [AnggotaController::class, 'promoteToAdmin'])->name('anggota.promote');
+    Route::post('/anggota/{anggota}/demote', [AnggotaController::class, 'demoteToMember'])->name('anggota.demote');
+    Route::resource('anggota', AnggotaController::class)->parameters(['anggota' => 'anggota']);
     Route::resource('unit-organisasi', UnitOrganisasiController::class);
     Route::resource('jabatan', JabatanController::class);
     Route::resource('index-surat', IndexSuratController::class);
-    // Route::resource('anggota', AnggotaController::class);
-    Route::resource('anggota', AnggotaController::class)->parameters(['anggota' => 'anggota']);
     Route::resource('surat', SuratController::class);
     Route::patch('surat/{surat}/status', [SuratController::class, 'updateStatus'])->name('surat.status');
     Route::resource('agenda', AgendaController::class);
